@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <MicomToolCommonProjectFile Version="1.00">
-  <CreatorType Name="CubeSuite+" Version="V8.08.00  [10 Jun 2022]" />
+  <CreatorType Name="CubeSuite+" Version="V8.13.00  [05 Dec 2024]" />
   <Placeholders>
     <PlaceholderPrefix>%</PlaceholderPrefix>
     <PlaceholderPostfix>%</PlaceholderPostfix>
@@ -120,6 +120,56 @@
           <Path>src\smc_gen\Config_TMR0\Config_TMR0_user.c</Path>
         </Category>
       </Category>
+      <Category Name="r_flash_rx">
+        <Path>src\r_flash_rx\r01an2184jj0521-rx-flash.pdf</Path>
+        <Category Name="r_config">
+          <Path>src\r_flash_rx\r_config\r_flash_rx_config.h</Path>
+        </Category>
+        <Category Name="r_flash_rx">
+          <Category Name="doc">
+            <Category Name="en">
+              <Path>src\r_flash_rx\r_flash_rx\doc\en\r01an2184ej0521-rx-flash.pdf</Path>
+            </Category>
+            <Category Name="ja">
+              <Path>src\r_flash_rx\r_flash_rx\doc\ja\r01an2184jj0521-rx-flash.pdf</Path>
+            </Category>
+          </Category>
+          <Path>src\r_flash_rx\r_flash_rx\readme.txt</Path>
+          <Path>src\r_flash_rx\r_flash_rx\r_flash_rx_if.h</Path>
+          <Category Name="src">
+            <Category Name="flash_type_1">
+              <Path>src\r_flash_rx\r_flash_rx\src\flash_type_1\r_flash_type1.c</Path>
+              <Path>src\r_flash_rx\r_flash_rx\src\flash_type_1\r_flash_type1_if.h</Path>
+            </Category>
+            <Category Name="flash_type_3">
+              <Path>src\r_flash_rx\r_flash_rx\src\flash_type_3\r_flash_type3.c</Path>
+              <Path>src\r_flash_rx\r_flash_rx\src\flash_type_3\r_flash_type3_if.h</Path>
+            </Category>
+            <Category Name="flash_type_4">
+              <Path>src\r_flash_rx\r_flash_rx\src\flash_type_4\r_flash_type4.c</Path>
+              <Path>src\r_flash_rx\r_flash_rx\src\flash_type_4\r_flash_type4_if.h</Path>
+            </Category>
+            <Category Name="flash_type_5">
+              <Path>src\r_flash_rx\r_flash_rx\src\flash_type_5\r_flash_type5.c</Path>
+              <Path>src\r_flash_rx\r_flash_rx\src\flash_type_5\r_flash_type5_if.h</Path>
+            </Category>
+            <Path>src\r_flash_rx\r_flash_rx\src\r_flash_fcu.c</Path>
+            <Path>src\r_flash_rx\r_flash_rx\src\r_flash_fcu.h</Path>
+            <Path>src\r_flash_rx\r_flash_rx\src\r_flash_group.c</Path>
+            <Path>src\r_flash_rx\r_flash_rx\src\r_flash_group.h</Path>
+            <Path>src\r_flash_rx\r_flash_rx\src\r_flash_nofcu.c</Path>
+            <Path>src\r_flash_rx\r_flash_rx\src\r_flash_nofcu.h</Path>
+            <Path>src\r_flash_rx\r_flash_rx\src\r_flash_rx.c</Path>
+            <Path>src\r_flash_rx\r_flash_rx\src\r_flash_rx.h</Path>
+            <Path>src\r_flash_rx\r_flash_rx\src\r_flash_targets.h</Path>
+            <Category Name="targets">
+              <Category Name="rx72t">
+                <Path>src\r_flash_rx\r_flash_rx\src\targets\rx72t\r_flash_rx72t.h</Path>
+              </Category>
+            </Category>
+          </Category>
+        </Category>
+      </Category>
     </Files>
     <DebugOptions>
       <ConnectSettings>
@@ -128,7 +178,7 @@
       <DebugToolSettings />
     </DebugOptions>
     <Device Series="RX">R5F572TFCxFP</Device>
-    <BuildOptions Name="CC-RX" Version="V3.02.00">
+    <BuildOptions Name="CC-RX" Version="V3.07.00">
       <BuildMode Name="DefaultBuild" Active="True">
         <GeneralOptions>
           <SimultaneouslyBuild>false</SimultaneouslyBuild>
@@ -137,6 +187,14 @@
           <Option>-isa=rxv3</Option>
           <Option>-fpu</Option>
           <Option>-lang=c99</Option>
+          <Option>-include=src\r_flash_rx\r_flash_rx\src\targets\rx72t</Option>
+          <Option>-include=src\r_flash_rx\r_flash_rx\src\flash_type_5</Option>
+          <Option>-include=src\r_flash_rx\r_flash_rx\src\flash_type_4</Option>
+          <Option>-include=src\r_flash_rx\r_flash_rx\src\flash_type_3</Option>
+          <Option>-include=src\r_flash_rx\r_flash_rx\src\flash_type_1</Option>
+          <Option>-include=src\r_flash_rx\r_flash_rx\src</Option>
+          <Option>-include=src\r_flash_rx\r_flash_rx</Option>
+          <Option>-include=src\r_flash_rx\r_config</Option>
           <Option>-include=src\smc_gen\Config_TMR0</Option>
           <Option>-include=src\smc_gen\r_pincfg</Option>
           <Option>-include=src\smc_gen\r_config</Option>
@@ -149,29 +207,29 @@
           <Option>-include=src\smc_gen\general</Option>
           <Option>-include=src\smc_gen\Config_PORT</Option>
           <Option>-include=src</Option>
-          <Option>-output=obj=%BuildModeName%\%FileLeaf%.obj</Option>
           <Option>-debug</Option>
           <Option>-g_line</Option>
           <Option>-optimize=0</Option>
           <Option>-tfu=intrinsic</Option>
           <Option>-nologo</Option>
           <Option>-asmopt=-bank</Option>
+          <Option>-output=obj=%BuildModeName%\%FileLeaf%.obj</Option>
         </CompileOptions>
         <AssembleOptions>
           <Option>-isa=rxv3</Option>
           <Option>-fpu</Option>
-          <Option>-output=%BuildModeName%\%FileLeaf%.obj</Option>
           <Option>-debug</Option>
           <Option>-nologo</Option>
           <Option>-bank</Option>
+          <Option>-output=%BuildModeName%\%FileLeaf%.obj</Option>
         </AssembleOptions>
         <LinkOptions>
           <Option>-output=%BuildModeName%\%ProjectName%.abs</Option>
           <Option>-vect=_undefined_interrupt_source_isr</Option>
           <Option>-list=%BuildModeName%\%ProjectName%.map</Option>
           <Option>-nooptimize</Option>
-          <Option>-start=SU,SI,B_1,R_1,B_2,R_2,B,R/4,PResetPRG,C_1,C_2,C,C$*,D*,W*,L,P/FFF80000,EXCEPTVECT/FFFFFF80,RESETVECT/FFFFFFFC</Option>
-          <Option>-rom=D=R,D_1=R_1,D_2=R_2</Option>
+          <Option>-start=SU,SI,B_1,R_1,B_2,R_2,B,R,RPFRAM/00000004,PResetPRG,C_1,C_2,C,C$*,D*,W*,L,P,PFRAM/FFF80000,EXCEPTVECT/FFFFFF80,RESETVECT/FFFFFFFC</Option>
+          <Option>-rom=D=R,D_1=R_1,D_2=R_2,PFRAM=RPFRAM</Option>
           <Option>-nologo</Option>
           <Option>-end</Option>
           <Option>-input=%BuildModeName%\%ProjectName%.abs</Option>
@@ -219,8 +277,24 @@
           <Path>DefaultBuild\Pin.obj</Path>
           <Path>DefaultBuild\Config_TMR0.obj</Path>
           <Path>DefaultBuild\Config_TMR0_user.obj</Path>
+          <Path>DefaultBuild\r_flash_fcu.obj</Path>
+          <Path>DefaultBuild\r_flash_group.obj</Path>
+          <Path>DefaultBuild\r_flash_nofcu.obj</Path>
+          <Path>DefaultBuild\r_flash_rx.obj</Path>
+          <Path>DefaultBuild\r_flash_type1.obj</Path>
+          <Path>DefaultBuild\r_flash_type3.obj</Path>
+          <Path>DefaultBuild\r_flash_type4.obj</Path>
+          <Path>DefaultBuild\r_flash_type5.obj</Path>
         </LinkOrder>
         <CommonOptions>
+          <IncludePathForC>src\r_flash_rx\r_flash_rx\src\targets\rx72t</IncludePathForC>
+          <IncludePathForC>src\r_flash_rx\r_flash_rx\src\flash_type_5</IncludePathForC>
+          <IncludePathForC>src\r_flash_rx\r_flash_rx\src\flash_type_4</IncludePathForC>
+          <IncludePathForC>src\r_flash_rx\r_flash_rx\src\flash_type_3</IncludePathForC>
+          <IncludePathForC>src\r_flash_rx\r_flash_rx\src\flash_type_1</IncludePathForC>
+          <IncludePathForC>src\r_flash_rx\r_flash_rx\src</IncludePathForC>
+          <IncludePathForC>src\r_flash_rx\r_flash_rx</IncludePathForC>
+          <IncludePathForC>src\r_flash_rx\r_config</IncludePathForC>
           <IncludePathForC>src\smc_gen\Config_TMR0</IncludePathForC>
           <IncludePathForC>src\smc_gen\r_pincfg</IncludePathForC>
           <IncludePathForC>src\smc_gen\r_config</IncludePathForC>
