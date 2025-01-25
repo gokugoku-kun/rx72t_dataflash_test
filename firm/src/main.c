@@ -32,8 +32,10 @@
 //#include <ios>                        // Remove the comment when you use ios
 //_SINT ios_base::Init::init_cnt;       // Remove the comment when you use ios
 #endif
+static uint32_t g_ram_vector_table[256];            // RAM space to hold the vector table
+static void flash_copy_vector_table(void);
+volatile uint8_t    g_buf[FLASH_CF_MIN_PGM_SIZE];   // FLASH_CF_MIN_PGM_SIZE is larger the DF block size
 
-void main(void);
 #ifdef __cplusplus
 extern "C" {
 void abort(void);
@@ -42,9 +44,146 @@ void abort(void);
 
 void main(void)
 {
+    uint32_t    i;
+    uint32_t    addr;
+    flash_err_t err;
+    flash_res_t result;
 
     {
         R_Config_TMR0_Start();
+    }
+
+    /* Initialize data to write */
+    for (i = 0; i < (sizeof(g_buf)); i++)
+    {
+        /* fill buffer with byte dummy data */
+        g_buf[i] = (uint8_t)i;
+    }
+
+    /* Copy vector table to RAM if interrupts possible while erasing/writing ROM */
+    //flash_copy_vector_table();
+
+    /* Open driver */
+    err = R_FLASH_Open();
+    if (FLASH_SUCCESS != err)
+    {
+        while(1)
+        {
+            ;       // inspect error code
+        }
+    }
+
+    /* DATA FLASH */
+
+    /* Erase data block */
+    err = R_FLASH_Erase(FLASH_DF_BLOCK_0, 1);
+    if (FLASH_SUCCESS != err)
+    {
+        while(1)
+        {
+            ;       // inspect error code
+        }
+    }
+
+    /* Verify erased */
+    err = R_FLASH_BlankCheck(FLASH_DF_BLOCK_0, FLASH_DF_BLOCK_SIZE, &result);
+    if ((FLASH_SUCCESS != err) || (FLASH_RES_BLANK != result))
+    {
+        while(1)
+        {
+            ;       // inspect error code
+        }
+    }
+
+    /* Erase all of data flash */
+    err = R_FLASH_Erase(FLASH_DF_BLOCK_0, FLASH_NUM_BLOCKS_DF);
+    if (FLASH_SUCCESS != err)
+    {
+        while(1)
+        {
+            ;       // inspect error code
+        }
+    }
+
+    /* Verify erased */
+    err = R_FLASH_BlankCheck(FLASH_DF_BLOCK_0, FLASH_DF_BLOCK_SIZE, &result);
+    if ((FLASH_SUCCESS != err) || (FLASH_RES_BLANK != result))
+    {
+        while(1)
+        {
+            ;       // inspect error code
+        }
+    }
+
+    /* Write to all of block 0 */
+    addr = FLASH_DF_BLOCK_0;
+    while (addr < (FLASH_DF_BLOCK_0 + FLASH_DF_BLOCK_SIZE))
+    {
+        /* cast byte buffer address to a uint32_t */
+        err = R_FLASH_Write((uint32_t)g_buf, addr, (sizeof(g_buf)));
+        if(FLASH_SUCCESS != err)
+        {
+            while(1)
+            {
+                ;       // inspect error code
+            }
+        }
+
+        /* Verify data write */
+        for (i=0; i < (sizeof(g_buf)); i++)
+        {
+            /* check on a byte basis */
+            if (g_buf[i] != (*((uint8_t *)(addr + i))))
+            {
+                while(1)
+                {
+                    ;   // inspect error code
+                }
+            }
+        }
+
+        addr += (sizeof(g_buf));
+    }
+
+    /* Erase all of data flash */
+    err = R_FLASH_Erase(FLASH_DF_BLOCK_0, FLASH_NUM_BLOCKS_DF);
+    if (FLASH_SUCCESS != err)
+    {
+        while(1)
+        {
+            ;       // inspect error code
+        }
+    }
+
+    /* Write all of data flash */
+    addr = FLASH_DF_BLOCK_0;
+    while (addr < FLASH_DF_BLOCK_INVALID)
+    {
+        /* cast byte buffer address to a uint32_t */
+        err = R_FLASH_Write((uint32_t)g_buf, addr, (sizeof(g_buf)));
+        if(FLASH_SUCCESS != err)
+        {
+            while(1)
+            {
+                ;   // inspect error code
+            }
+        }
+
+        /* Verify data write */
+        for (i = 0; i < (sizeof(g_buf)); i++)
+        {
+            /* inspect on a byte basis */
+            if (g_buf[i] != (*((uint8_t *)(addr + i))))
+            {
+                while(1)
+                {
+                    ;   // inspect error code
+                }
+            }
+
+        }
+
+        addr += (sizeof(g_buf));
     }
 
     while ( 1 )
@@ -52,6 +191,18 @@ void main(void)
 
     }
 }
+
+static void flash_copy_vector_table(void)
+{
+    uint32_t *p_vect_table;
+
+    /* cast to ensure get uint32_t pointer */
+    p_vect_table = (uint32_t *)__sectop("C$VECT");
+    g_ram_vector_table[23] = p_vect_table[23];
+
+    /* set_intb() takes void pointer */
+    set_intb((void *)g_ram_vector_table);
+} /* end of function flash_copy_vector_table() */
 
 #ifdef __cplusplus
 void abort(void)

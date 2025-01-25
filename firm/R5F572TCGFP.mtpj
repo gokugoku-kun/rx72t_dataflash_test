@@ -3543,6 +3543,7 @@ PFRAM=RPFRAM
       <DebuggerProperty-EssentialProperty-TargetConnect-JtagClock>Jtag_16_500</DebuggerProperty-EssentialProperty-TargetConnect-JtagClock>
       <DebuggerProperty-EssentialProperty-TargetConnect-FineBaudRate>Fine_2000000</DebuggerProperty-EssentialProperty-TargetConnect-FineBaudRate>
       <DebuggerProperty-EssentialProperty-TargetConnect-BaudRate>115200</DebuggerProperty-EssentialProperty-TargetConnect-BaudRate>
+      <DebuggerProperty-EssentialProperty-SaveSecurityId>No</DebuggerProperty-EssentialProperty-SaveSecurityId>
       <DebuggerProperty-EssentialProperty-Flash-SecurityIdMode>Hex</DebuggerProperty-EssentialProperty-Flash-SecurityIdMode>
       <DebuggerProperty-EssentialProperty-Flash-WorkRamStartAddress>4096</DebuggerProperty-EssentialProperty-Flash-WorkRamStartAddress>
       <GroupName>RX72T</GroupName>
@@ -3584,6 +3585,7 @@ PFRAM=RPFRAM
       <DebuggerProperty-DownloadProperty-DebugInformation-SkipStartup>True</DebuggerProperty-DownloadProperty-DebugInformation-SkipStartup>
       <DebuggerProperty-DownloadProperty-DebugInformation-MainSymbol>XwBtAGEAaQBuAA==</DebuggerProperty-DownloadProperty-DebugInformation-MainSymbol>
       <DebuggerProperty-DownloadProperty-DebugInformation-MaxLoaderMemorySize>500</DebuggerProperty-DownloadProperty-DebugInformation-MaxLoaderMemorySize>
+      <DebuggerProperty-DownloadProperty-DebugInformation-SearchGlobalVariablesOutsideCurrentScope>False</DebuggerProperty-DownloadProperty-DebugInformation-SearchGlobalVariablesOutsideCurrentScope>
       <DebuggerProperty-DownloadProperty-None-DefaultDownloadItemSupported>True</DebuggerProperty-DownloadProperty-None-DefaultDownloadItemSupported>
       <DebuggerProperty-OptionalProperty-Memory-MemoryMappings-Length>28</DebuggerProperty-OptionalProperty-Memory-MemoryMappings-Length>
       <DebuggerProperty-OptionalProperty-Memory-MemoryMappings-MemoryMapItem0-MapType>InternalRam</DebuggerProperty-OptionalProperty-Memory-MemoryMappings-MemoryMapItem0-MapType>
@@ -3875,8 +3877,8 @@ PFRAM=RPFRAM
       <DebuggerProperty-OptionalProperty-Register-UpdateDisplayInExecutionForPC>No</DebuggerProperty-OptionalProperty-Register-UpdateDisplayInExecutionForPC>
       <DebuggerProperty-OptionalProperty-Register-UpdateIntervalForPC>500</DebuggerProperty-OptionalProperty-Register-UpdateIntervalForPC>
       <DebuggerProperty-OptionalProperty-Break-BreakpointPriority>HardwareBreak</DebuggerProperty-OptionalProperty-Break-BreakpointPriority>
-      <DebuggerProperty-OptionalProperty-System-RewritingInternalRomProgramDebug>No</DebuggerProperty-OptionalProperty-System-RewritingInternalRomProgramDebug>
-      <DebuggerProperty-OptionalProperty-System-RewritingInternalDataFlashProgramDebug>No</DebuggerProperty-OptionalProperty-System-RewritingInternalDataFlashProgramDebug>
+      <DebuggerProperty-OptionalProperty-System-RewritingInternalRomProgramDebug>Yes</DebuggerProperty-OptionalProperty-System-RewritingInternalRomProgramDebug>
+      <DebuggerProperty-OptionalProperty-System-RewritingInternalDataFlashProgramDebug>Yes</DebuggerProperty-OptionalProperty-System-RewritingInternalDataFlashProgramDebug>
       <DebuggerProperty-OptionalProperty-System-BootSwapProgramDebug>No</DebuggerProperty-OptionalProperty-System-BootSwapProgramDebug>
       <DebuggerProperty-OptionalProperty-System-ExecuteRoutineBeforeExecute>No</DebuggerProperty-OptionalProperty-System-ExecuteRoutineBeforeExecute>
       <DebuggerProperty-OptionalProperty-System-RoutineBeforeExecute />
@@ -3920,8 +3922,6 @@ PFRAM=RPFRAM
       <DebuggerProperty-HookProperty-HookTransaction-Connected-Length>0</DebuggerProperty-HookProperty-HookTransaction-Connected-Length>
       <DebuggerProperty-HookProperty-HookTransaction-Disconnecting-Length>0</DebuggerProperty-HookProperty-HookTransaction-Disconnecting-Length>
       <DebuggerProperty-EssentialProperty-EmulatorConnect-SerialNumber />
-      <DebuggerProperty-EssentialProperty-SaveSecurityId>No</DebuggerProperty-EssentialProperty-SaveSecurityId>
-      <DebuggerProperty-DownloadProperty-DebugInformation-SearchGlobalVariablesOutsideCurrentScope>False</DebuggerProperty-DownloadProperty-DebugInformation-SearchGlobalVariablesOutsideCurrentScope>
     </Instance>
   </Class>
   <Class Guid="100f3761-3d7e-4559-b1d8-375a0c7bf682">
