@@ -66,7 +66,7 @@
  * started. Notification of the operation completion is done via the callback 
  * function. 
  */
-#define FLASH_CFG_DATA_FLASH_BGO   (0)
+#define FLASH_CFG_DATA_FLASH_BGO   (1)
 
 
 /******************************************************************************

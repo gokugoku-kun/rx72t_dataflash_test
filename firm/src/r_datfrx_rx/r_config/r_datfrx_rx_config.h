@@ -43,7 +43,7 @@ DATA FLASH : SET THE BLOCK ADDRESS NUMBER
    FLASH_TYPE1b = The settable value is from 3 to 32.
    FLASH_TYPE3,4,5 = The settable value is from 3 to 1024.
    The block address to use is from 0x00100000 to 0x00101FFF. (up to 8 blocks) */
-#define FLASH_DM_CFG_DF_BLOCK_NUM   (8)
+#define FLASH_DM_CFG_DF_BLOCK_NUM   (10)
 
 /************************************************************************************************
 DATA FLASH : SET THE DATA NUMBER OF THE DATA NUMBER
@@ -51,7 +51,7 @@ DATA FLASH : SET THE DATA NUMBER OF THE DATA NUMBER
 /* Please set the data number to use by the data flash.
    FLASH_TYPE1 = The settable value is from 1 to 255.
    FLASH_TYPE3,4,5 = The settable value is from 1 to 1024. */
-#define FLASH_DM_CFG_DF_DATA_NUM    (5)
+#define FLASH_DM_CFG_DF_DATA_NUM    (3)
 
 /************************************************************************************************
 DATA FLASH : SET THE DATA LENGTH FOR THE DATA NUMBER
@@ -63,9 +63,9 @@ DATA FLASH : SET THE DATA LENGTH FOR THE DATA NUMBER
    The data size of the data number not to use is ignored.
    This number must be a multiple of the minimum programming size for memory area you are writing to.
    1 bytes (e.g. RX110, RX111, RX113, RX230, RX231) */
-#define FLASH_DM_CFG_DF_SIZE_NO0    (1)
-#define FLASH_DM_CFG_DF_SIZE_NO1    (1)
-#define FLASH_DM_CFG_DF_SIZE_NO2    (1)
+#define FLASH_DM_CFG_DF_SIZE_NO0    (40)
+#define FLASH_DM_CFG_DF_SIZE_NO1    (40)
+#define FLASH_DM_CFG_DF_SIZE_NO2    (40)
 #define FLASH_DM_CFG_DF_SIZE_NO3    (1)
 #define FLASH_DM_CFG_DF_SIZE_NO4    (1)
 #define FLASH_DM_CFG_DF_SIZE_NO5    (1)
