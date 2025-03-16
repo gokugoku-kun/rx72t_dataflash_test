@@ -42,12 +42,57 @@ void abort(void);
 }
 #endif
 
+flash_interrupt_event_t status = 0xff;
+void u_cb_function(void *event) /* コールバック関数 */
+{
+flash_int_cb_args_t *ready_event = event;
+/* ISRコールバック関数の処理 */
+
+    switch (ready_event->event)
+    {
+    case FLASH_INT_EVENT_INITIALIZED:
+        status = FLASH_INT_EVENT_INITIALIZED;
+        break;
+    case FLASH_INT_EVENT_ERASE_COMPLETE:
+        status = FLASH_INT_EVENT_ERASE_COMPLETE;
+        break;
+    case FLASH_INT_EVENT_WRITE_COMPLETE:
+        status = FLASH_INT_EVENT_WRITE_COMPLETE;
+        break;
+    case FLASH_INT_EVENT_BLANK:
+        status = FLASH_INT_EVENT_BLANK;
+        break;
+    case FLASH_INT_EVENT_NOT_BLANK:
+        status = FLASH_INT_EVENT_NOT_BLANK;
+        break;
+    case FLASH_INT_EVENT_TOGGLE_STARTUPAREA:
+    case FLASH_INT_EVENT_SET_ACCESSWINDOW:
+    case FLASH_INT_EVENT_LOCKBIT_WRITTEN:
+    case FLASH_INT_EVENT_LOCKBIT_PROTECTED:
+    case FLASH_INT_EVENT_LOCKBIT_NON_PROTECTED:
+    case FLASH_INT_EVENT_ERR_DF_ACCESS:
+    case FLASH_INT_EVENT_ERR_CF_ACCESS:
+    case FLASH_INT_EVENT_ERR_SECURITY:
+    case FLASH_INT_EVENT_ERR_CMD_LOCKED:
+    case FLASH_INT_EVENT_ERR_LOCKBIT_SET:
+    case FLASH_INT_EVENT_ERR_FAILURE:
+    case FLASH_INT_EVENT_TOGGLE_BANK:
+    case FLASH_INT_EVENT_END_ENUM:
+    default:
+        /* code */
+        break;
+    }
+}
+
+
 void main(void)
 {
     uint32_t    i;
     uint32_t    addr;
     flash_err_t err;
     flash_res_t result;
+
+    flash_interrupt_config_t cb_func_info;
 
     {
         R_Config_TMR0_Start();
@@ -63,55 +108,102 @@ void main(void)
     /* Copy vector table to RAM if interrupts possible while erasing/writing ROM */
     //flash_copy_vector_table();
 
-    /* Open driver */
-    err = R_FLASH_Open();
-    if (FLASH_SUCCESS != err)
+
+    /* APIの初期設定 */
     {
-        while(1)
+        err = R_FLASH_Open();
+        /* エラーの確認 */
+        if (FLASH_SUCCESS != err)
         {
-            ;       // inspect error code
+            while(1)
+            {
+                ;       // inspect error code
+            }
+        }
+        /* コールバック関数と割り込み優先レベルの設定 */
+        cb_func_info.pcallback = u_cb_function;
+        cb_func_info.int_priority = 1;
+        err = R_FLASH_Control(FLASH_CMD_SET_BGO_CALLBACK,(void *)&cb_func_info);
+        if (FLASH_SUCCESS != err)
+        {
+            while(1)
+            {
+                ;       // inspect error code
+            }
         }
     }
 
     /* DATA FLASH */
 
     /* Erase data block */
-    err = R_FLASH_Erase(FLASH_DF_BLOCK_0, 1);
-    if (FLASH_SUCCESS != err)
     {
-        while(1)
+        status = 0xff;
+        err = R_FLASH_Erase(FLASH_DF_BLOCK_0, 1);
+        if (FLASH_SUCCESS != err)
         {
-            ;       // inspect error code
+            while(1)
+            {
+                ;       // inspect error code
+            }
+        }
+        /* フラッシュモジュールのAPI関数の実行状態を確認 */
+        while (status != FLASH_INT_EVENT_ERASE_COMPLETE)
+        {
+        /* 任意の処理を実施 */
         }
     }
 
     /* Verify erased */
-    err = R_FLASH_BlankCheck(FLASH_DF_BLOCK_0, FLASH_DF_BLOCK_SIZE, &result);
-    if ((FLASH_SUCCESS != err) || (FLASH_RES_BLANK != result))
     {
-        while(1)
+        status = 0xff;
+        err = R_FLASH_BlankCheck(FLASH_DF_BLOCK_0, FLASH_DF_BLOCK_SIZE, &result);
+        if ((FLASH_SUCCESS != err))
         {
-            ;       // inspect error code
+            while(1)
+            {
+                ;       // inspect error code
+            }
+        }
+        /* フラッシュモジュールのAPI関数の実行状態を確認 */
+        while (status != FLASH_INT_EVENT_BLANK)
+        {
+        /* 任意の処理を実施 */
         }
     }
 
     /* Erase all of data flash */
-    err = R_FLASH_Erase(FLASH_DF_BLOCK_0, FLASH_NUM_BLOCKS_DF);
-    if (FLASH_SUCCESS != err)
     {
-        while(1)
+        status = 0xff;
+        err = R_FLASH_Erase(FLASH_DF_BLOCK_0, FLASH_NUM_BLOCKS_DF);
+        if (FLASH_SUCCESS != err)
         {
-            ;       // inspect error code
+            while(1)
+            {
+                ;       // inspect error code
+            }
+        }
+        /* フラッシュモジュールのAPI関数の実行状態を確認 */
+        while (status != FLASH_INT_EVENT_ERASE_COMPLETE)
+        {
+        /* 任意の処理を実施 */
         }
     }
 
     /* Verify erased */
-    err = R_FLASH_BlankCheck(FLASH_DF_BLOCK_0, FLASH_DF_BLOCK_SIZE, &result);
-    if ((FLASH_SUCCESS != err) || (FLASH_RES_BLANK != result))
     {
-        while(1)
+        status = 0xff;
+        err = R_FLASH_BlankCheck(FLASH_DF_BLOCK_0, FLASH_DF_BLOCK_SIZE, &result);
+        if ((FLASH_SUCCESS != err))
         {
-            ;       // inspect error code
+            while(1)
+            {
+                ;       // inspect error code
+            }
+        }
+        /* フラッシュモジュールのAPI関数の実行状態を確認 */
+        while (status != FLASH_INT_EVENT_BLANK)
+        {
+        /* 任意の処理を実施 */
         }
     }
 
@@ -120,6 +212,7 @@ void main(void)
     while (addr < (FLASH_DF_BLOCK_0 + FLASH_DF_BLOCK_SIZE))
     {
         /* cast byte buffer address to a uint32_t */
+        status = 0xff;
         err = R_FLASH_Write((uint32_t)g_buf, addr, (sizeof(g_buf)));
         if(FLASH_SUCCESS != err)
         {
@@ -127,6 +220,11 @@ void main(void)
             {
                 ;       // inspect error code
             }
+        }
+        /* フラッシュモジュールのAPI関数の実行状態を確認 */
+        while (status != FLASH_INT_EVENT_WRITE_COMPLETE)
+        {
+        /* 任意の処理を実施 */
         }
 
         /* Verify data write */
@@ -146,12 +244,20 @@ void main(void)
     }
 
     /* Erase all of data flash */
-    err = R_FLASH_Erase(FLASH_DF_BLOCK_0, FLASH_NUM_BLOCKS_DF);
-    if (FLASH_SUCCESS != err)
     {
-        while(1)
+        status = 0xff;
+        err = R_FLASH_Erase(FLASH_DF_BLOCK_0, FLASH_NUM_BLOCKS_DF);
+        if (FLASH_SUCCESS != err)
         {
-            ;       // inspect error code
+            while(1)
+            {
+                ;       // inspect error code
+            }
+        }
+        /* フラッシュモジュールのAPI関数の実行状態を確認 */
+        while (status != FLASH_INT_EVENT_ERASE_COMPLETE)
+        {
+        /* 任意の処理を実施 */
         }
     }
 
@@ -160,6 +266,7 @@ void main(void)
     while (addr < FLASH_DF_BLOCK_INVALID)
     {
         /* cast byte buffer address to a uint32_t */
+        status = 0xff;
         err = R_FLASH_Write((uint32_t)g_buf, addr, (sizeof(g_buf)));
         if(FLASH_SUCCESS != err)
         {
@@ -167,6 +274,11 @@ void main(void)
             {
                 ;   // inspect error code
             }
+        }
+        /* フラッシュモジュールのAPI関数の実行状態を確認 */
+        while (status != FLASH_INT_EVENT_WRITE_COMPLETE)
+        {
+        /* 任意の処理を実施 */
         }
 
         /* Verify data write */
